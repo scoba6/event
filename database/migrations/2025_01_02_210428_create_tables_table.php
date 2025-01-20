@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('evenement_id')->constrained('evenements');
             $table->string('namtab')->nullable(false);
             $table->string('numtab')->nullable();
-            $table->string('clainv')->nullable(false)->default(Classification::A);
+            $table->string('clatab')->nullable(false)->default(Classification::A);
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

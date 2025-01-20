@@ -10,6 +10,7 @@ use App\Models\Evenement;
 use App\Models\Prestation;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -21,6 +22,7 @@ use RelationManagers\PrestationRelationManager;
 use App\Filament\Resources\EvenementResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EvenementResource\RelationManagers;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 
 class EvenementResource extends Resource
 {
@@ -44,8 +46,10 @@ class EvenementResource extends Resource
                     ->required()
                     ->searchable(),
                 DatePicker::make('strevn')->label('DU')->required(),
-                DatePicker::make('endevn')->label('AU')->required(),
-                RichEditor::make('desprs')->label('DESCRIPTION')->columnSpan('full'),
+                DatePicker::make('endevn')->label('AU')
+                    //->maxDate(now())
+                    ->required(),
+                RichEditor::make('desevn')->label('DESCRIPTION')->columnSpan('full'),
 
             ]);
     }
@@ -57,12 +61,13 @@ class EvenementResource extends Resource
                 TextColumn::make('libevn')->sortable()->label('LIBELLE')->searchable(),
                 TextColumn::make('prestation.libprs')->sortable()->label('TYPE')->searchable(),
                 TextColumn::make('customer.nomcli')->sortable()->label('CLIENT')->searchable(),
-                TextColumn::make('strevn')->sortable()->label('DU'),
-                TextColumn::make('endevn')->sortable()->label('AU'),
-                //TextColumn::make('desevn')->sortable()->label('DESCRIPTION'),
+                TextColumn::make('strevn')->sortable()->label('DU')
+                    ->date('d/m/Y'),
+                TextColumn::make('endevn')->sortable()->label('AU')
+                    ->date('d/m/Y'),
             ])
             ->filters([
-                //
+                DateRangeFilter::make('strevn')->label('DU/AU')->placeholder('DU/AU')->disableClear(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

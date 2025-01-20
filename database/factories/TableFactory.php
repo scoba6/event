@@ -22,7 +22,7 @@ class TableFactory extends Factory
             'evenement_id' => Evenement::all()->unique()->random()->id,
             'namtab' => $this->faker->word(),
             'numtab' => $this->faker->randomNumber(2),
-            'clainv' => $this->faker->randomElement(Classification::cases()),
+            'clatab' => $this->faker->randomElement(Classification::cases()),
         ];
     }
 }

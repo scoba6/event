@@ -13,7 +13,7 @@ use Filament\Widgets\ChartWidget;
 class StatNbreEvent extends ChartWidget
 {
     //protected static string $view = 'filament.widgets.stat-nbre-event';
-    protected static ?string $heading = 'Nombre d événements organisés par mois';
+    protected static ?string $heading = 'Nombre d\'événements enregistrés par mois';
     protected static ?string $maxHeight = '380px';
     //protected int | string | array $columnSpan = 'full';
     protected static ?int $sort = 3;
@@ -33,7 +33,7 @@ class StatNbreEvent extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Nombre d événements organisés par mois',
+                    'label' => 'Nombre d\'événements enregistrés par mois',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                     'backgroundColor' => '#36A2EB',
                     'borderColor' => '#9BD0F5',

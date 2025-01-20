@@ -2,17 +2,19 @@
 
 namespace App\Filament\Resources\EvenementResource\RelationManagers;
 
-use App\Enums\Classification;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Enums\Classification;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use EightyNine\ExcelImport\ExcelImportAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
+use EightyNine\ExcelImport\Tables\ExcelImportRelationshipAction;
 
 class TablesRelationManager extends RelationManager
 {
@@ -26,7 +28,7 @@ class TablesRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255),
                 TextInput::make('numtab')->label('NUMERO'),
-                Select::make('clainv')->label('CLASSIFICATION')->required()->options(Classification::class)->columnSpan('full'),
+                Select::make('clatab')->label('CLASSIFICATION')->required()->options(Classification::class)->columnSpan('full'),
 
             ]);
     }
@@ -38,13 +40,16 @@ class TablesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('namtab')->sortable()->searchable()->label('NOM'),
                 TextColumn::make('numtab')->sortable()->searchable()->label('NUMERO'),
-                TextColumn::make('clainv')->sortable()->searchable()->label('CLASSIFICATION'),
+                TextColumn::make('clatab')->sortable()->searchable()->label('CLASSIFICATION'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make('Ajouter une table'),
+                ExcelImportRelationshipAction::make()
+                    ->slideOver()
+                    ->color('primary')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -52,8 +57,12 @@ class TablesRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),
+
                 ]),
             ]);
     }
+
+
+
 }

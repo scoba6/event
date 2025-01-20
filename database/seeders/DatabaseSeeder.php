@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
         //User::factory(10)->create();
         //Customer::factory(10)->create();
         //Evenement::factory(30)->create();
-        //Table::factory(300)->create();
-        //Invite::factory(1500)->create();
+        Table::factory(300)->create();
+        Invite::factory(1500)->create();
         Prestataire::factory(5)->create();
         Hotesse::factory(20)->create();
 

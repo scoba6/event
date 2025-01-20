@@ -14,9 +14,11 @@ use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
+use EightyNine\ExcelImport\Tables\ExcelImportRelationshipAction;
 
 class InvitesRelationManager extends RelationManager
 {
@@ -58,13 +60,19 @@ class InvitesRelationManager extends RelationManager
                 TextColumn::make('event.libevn')->sortable()->searchable()->label('EVENEMENT'),
                 TextColumn::make('table.namtab')->sortable()->searchable()->label('TABLE'),
                 TextColumn::make('clainv')->sortable()->searchable()->label('CLASSIFICATION'),
-                IconColumn::make('preinv')->sortable()->searchable()->label('PRESENCE')->boolean(),
+                //IconColumn::make('preinv')->sortable()->searchable()->label('PRESENCE')->boolean(),
+                ToggleColumn::make('preinv')->label('PRESENCE')->sortable()
+                    ->onColor('success')
+                    ->offColor('danger'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make('Ajouter un invite'),
+                ExcelImportRelationshipAction::make()
+                    ->slideOver()
+                    ->color('primary')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
