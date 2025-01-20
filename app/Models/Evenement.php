@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Evenement extends Model
 {
     /** @use HasFactory<\Database\Factories\EvenementFactory> */
-    use HasFactory, SoftDeletes, Userstamps;
+    use HasFactory, SoftDeletes, Userstamps, LogsActivity;
 
     protected $fillable = [
         'customer_id',
@@ -61,5 +63,18 @@ class Evenement extends Model
     public function invites(): HasMany
     {
         return $this->hasMany(Invite::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly([
+            'customer_id',
+            'libevn',
+            'desevn',
+            'strevn',
+            'endevn',
+            'typevn'
+        ]);
     }
 }

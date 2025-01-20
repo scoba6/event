@@ -2,8 +2,10 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Evenement;
 use Carbon\Carbon;
 use App\Models\Prestation;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Flowframe\Trend\Trend;
 use Filament\Widgets\Widget;
 use Flowframe\Trend\TrendValue;
@@ -18,7 +20,7 @@ class StatTypeEvent extends ChartWidget
     protected static ?int $sort = 2;
     protected static ?string $pollingInterval = '10s';
     protected static ?array $options = [
-        'indexAxis'=> 'y',
+        'indexAxis'=> 'x',
     ];
 
 
@@ -26,13 +28,17 @@ class StatTypeEvent extends ChartWidget
     protected function getData(): array
     {
         $label = Prestation::pluck('libprs')->toArray();
-        $data = Trend::model(Prestation::class)
+        //$data = Trend::model(Prestation::class);
+        $data  = Trend::query(Evenement::query()
+            ->groupBy('typevn')
+            ->orderBy('typevn')
+        )
         ->between(
             start: now()->startOfYear(),
             end: now()->endOfYear(),
         )
         ->perYear()
-        ->count('libprs');
+        ->count();
 
 
         return [
@@ -40,6 +46,7 @@ class StatTypeEvent extends ChartWidget
                 [
                    'label' => 'Répartion par type de prestation',
                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                   // 'data' => $data,
                     'backgroundColor' =>[
                         'rgba(35, 99, 132, 0.2)',
                         'rgba(126, 159, 64, 0.2)',
@@ -58,6 +65,8 @@ class StatTypeEvent extends ChartWidget
                 ],
             ],
             'labels' =>  $label,
+
+            //'labels' => ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
 
         ];
 

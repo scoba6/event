@@ -2,20 +2,38 @@
 
 namespace App\Filament\Widgets;
 
+use Carbon\Carbon;
 use App\Models\Customer;
 use App\Models\Evenement;
 use App\Models\Prestataire;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class StatsOverview extends BaseWidget
 {
+    use InteractsWithPageFilters;
+    protected static ?int $sort = 0;
+    public $startDate;
+    public $endDate;
+
     protected function getStats(): array
     {
 
-        $clt = Customer::all()->count();
-        $evt = Evenement::all()->count();
-        $prs = Prestataire::all()->count();
+
+
+        $startDate = ! is_null($this->filters['startDate'] ?? null) ?
+            Carbon::parse($this->filters['startDate']) :
+            null;
+
+        $endDate = ! is_null($this->filters['endDate'] ?? null) ?
+            Carbon::parse($this->filters['endDate']) : now();
+
+        $val = $this->filters['typevn'] ?? null;
+
+        $clt = Customer::all()->whereBetween('created_at',[$startDate,$endDate])->count();
+        $evt = Evenement::all()->where('typevn','=',$val)->whereBetween('created_at',[$startDate,$endDate])->count();
+        $prs = Prestataire::all()->whereBetween('created_at',[$startDate,$endDate])->count();
 
         return [
             Stat::make('CLIENTS', $clt)

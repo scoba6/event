@@ -14,6 +14,8 @@ class StatNbreEvent extends ChartWidget
 {
     //protected static string $view = 'filament.widgets.stat-nbre-event';
     protected static ?string $heading = 'Nombre d événements organisés par mois';
+    protected static ?string $maxHeight = '380px';
+    //protected int | string | array $columnSpan = 'full';
     protected static ?int $sort = 3;
     protected static ?string $pollingInterval = '10s';
     protected function getData(): array
@@ -37,7 +39,6 @@ class StatNbreEvent extends ChartWidget
                     'borderColor' => '#9BD0F5',
                 ],
             ],
-            //'labels' => $data->map(fn (TrendValue $value) => $value->date),
             'labels' => ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
         ];
     }
