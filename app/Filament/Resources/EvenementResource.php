@@ -19,8 +19,11 @@ use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use RelationManagers\CustomerRelationManager;
 use RelationManagers\PrestationRelationManager;
+use Torgodly\Html2Media\Actions\Html2MediaAction;
 use App\Filament\Resources\EvenementResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use PrintFilament\Print\Infolists\Components\PrintComponent;
 use App\Filament\Resources\EvenementResource\RelationManagers;
 use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 
@@ -41,6 +44,7 @@ class EvenementResource extends Resource
                 TextInput::make('libevn')->required()->label('LIBELLE')->columnSpan('full')->unique(ignoreRecord: true),
                 Select::make('customer_id')->label('CLIENT')
                     ->options(Customer::all()->pluck('nomcli', 'id')->toArray())
+                    ->searchable()
                     ->required(),
                 Select::make('typevn')->label('TYPE')->options(Prestation::all()->pluck('libprs', 'id')->toArray())
                     ->required()
@@ -50,6 +54,7 @@ class EvenementResource extends Resource
                     //->maxDate(now())
                     ->required(),
                 RichEditor::make('desevn')->label('DESCRIPTION')->columnSpan('full'),
+
 
             ]);
     }
@@ -71,10 +76,16 @@ class EvenementResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                        ->label('Excel'),
+                    Html2MediaAction::make('print')
+                        ->savePdf()
+                        //->content(fn($record) => view('invoice', ['record' => $record]))
                 ]),
             ]);
     }

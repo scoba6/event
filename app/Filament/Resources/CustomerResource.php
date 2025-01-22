@@ -36,9 +36,9 @@ class CustomerResource extends Resource
             ->schema([
                 Select::make('titcli')->label('TITRE')->required()->options(Titre::class)->columnSpan('full'),
                 TextInput::make('nomcli')->required()->label('NOM')->columnSpan('full')->unique(ignoreRecord: true),
-                TextInput::make('maicli')->required()->label('E-MAIL')->email(),
+                TextInput::make('maicli')->label('E-MAIL')->email(),
                 TextInput::make('telcli')->required()->label('TELEPHONE'),
-                Textarea::make('adrcli')->required()->label('ADRESSE')->columnSpan('full'),
+                Textarea::make('adrcli')->label('ADRESSE')->columnSpan('full'),
 
             ]);
     }
